@@ -6,9 +6,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static backend.tests.data.Series.generateSeries;
+import static backend.tests.utils.TestHelper.deleteAllSeries;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SeriesApiTests extends TestBase {
@@ -45,14 +45,5 @@ public class SeriesApiTests extends TestBase {
         //then
         seriesList = favoriteSeriesService.getAllSeries();
         assertEquals(0, seriesList.size());
-    }
-
-    private void deleteAllSeries() {
-        List<Integer> seriesIds;
-        List<SeriesResponse> seriesList = favoriteSeriesService.getAllSeries();
-        if (seriesList.size() > 0) {
-            seriesIds = seriesList.stream().map(SeriesResponse::getId).collect(Collectors.toList());
-            seriesIds.forEach(id -> favoriteSeriesService.removeSeries(id));
-        }
     }
 }
