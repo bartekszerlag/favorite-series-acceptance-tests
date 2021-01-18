@@ -1,8 +1,9 @@
 package frontend.config;
 
 import org.aeonbits.owner.Config;
+import org.aeonbits.owner.Config.Sources;
 
-@Config.Sources("classpath:frontend.properties")
+@Sources("classpath:frontend.properties")
 public interface TestProperties extends Config {
 
     @Key("base_url")

@@ -1,7 +1,6 @@
 package backend.services;
 
 import backend.pojo.SeriesRequest;
-import io.restassured.RestAssured;
 import backend.pojo.SeriesResponse;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
