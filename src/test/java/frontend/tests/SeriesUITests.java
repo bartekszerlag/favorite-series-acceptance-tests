@@ -1,15 +1,17 @@
 package frontend.tests;
 
 import frontend.pages.MainPage;
+import io.qameta.allure.Description;
+import io.qameta.allure.Severity;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static backend.tests.data.Series.generateSeries;
 import static backend.tests.utils.TestHelper.deleteAllSeries;
 import static frontend.config.DriverManager.getDriver;
+import static io.qameta.allure.SeverityLevel.BLOCKER;
 
-public class SeriesTests extends TestBase {
+public class SeriesUITests extends TestBase {
 
     @BeforeEach
     void classSetup() {
@@ -17,7 +19,8 @@ public class SeriesTests extends TestBase {
         refreshPage();
     }
 
-    @DisplayName("User should add series, see success alert and new series on the list")
+    @Severity(BLOCKER)
+    @Description("User should add series, see success alert and new series on the list")
     @Test
     void shouldAddSeries() {
         //when
@@ -31,11 +34,12 @@ public class SeriesTests extends TestBase {
                 .clickAddButton()
                 .assertThatButtonAlertContainsMessage("TV series added")
                 .clickReloadPageButton()
-                .assertThatAddedSeriesIsOnList(title);
-
+                .assertThatAddedSeriesIsOnList(title)
+                .assertThatSeriesListSizeIsEqualTo(1);
     }
 
-    @DisplayName("User should remove series, see success alert and empty list")
+    @Severity(BLOCKER)
+    @Description("User should remove series, see success alert and empty list")
     @Test
     void shouldRemoveSeries() {
         //when
@@ -49,8 +53,7 @@ public class SeriesTests extends TestBase {
                 .clickRemoveButton()
                 .assertThatButtonAlertContainsMessage("TV series removed")
                 .clickReloadPageButton()
-                .assertThatSeriesListIsEmpty();
-
+                .assertThatSeriesListSizeIsEqualTo(0);
     }
 
     private void refreshPage() {

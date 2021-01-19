@@ -26,14 +26,14 @@ public class TestBase {
     }
 
     @BeforeAll
-    static void setup() {
+    static void suitSetup() {
         favoriteSeriesService = new FavoriteSeriesService();
         initDriverConfig();
         navigateToPage(getProperties().baseUrl());
     }
 
     @AfterAll
-    static void cleanup() {
+    static void suitCleanup() {
         closeDriver();
     }
 }

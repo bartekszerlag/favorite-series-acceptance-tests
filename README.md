@@ -16,3 +16,10 @@ To run frontend tests you need to go to the project directory and run:
 If you want to run backend tests:
 
 ### `./mvnw -Dtest="backend.tests.**" test`
+
+To generate report of all tests you have to run:
+
+### `./mvnw test allure:report`
+
+You will find the report in **target/site/allure-maven-plugin/index.html** file.
+

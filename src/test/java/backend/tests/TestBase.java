@@ -13,10 +13,11 @@ public class TestBase {
     static FavoriteSeriesService favoriteSeriesService;
 
     @BeforeAll
-    static void setup() {
+    static void suitSetup() {
         favoriteSeriesService = new FavoriteSeriesService();
         TestProperties properties = ConfigFactory.create(TestProperties.class);
         RestAssured.baseURI = properties.baseUri();
+        RestAssured.useRelaxedHTTPSValidation();
         RestAssured.filters(
                 new RequestLoggingFilter(),
                 new ResponseLoggingFilter()
