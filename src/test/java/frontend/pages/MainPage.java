@@ -1,5 +1,6 @@
 package frontend.pages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -40,42 +41,49 @@ public class MainPage {
     @FindBy(id = "remove")
     private WebElement removeButton;
 
+    @Step("User types title")
     public MainPage typeIntoTitleInput(String title) {
         titleInput.sendKeys(title);
         logger.info(format("### User typed title: %s ###", title));
         return this;
     }
 
+    @Step("User types platform")
     public MainPage typeIntoPlatformInput(String platform) {
         platformInput.sendKeys(platform);
         logger.info(format("### User typed platform: %s ###", platform));
         return this;
     }
 
+    @Step("User types id")
     public MainPage typeIntoIdInput(String id){
         idInput.sendKeys(id);
         logger.info(format("### User typed id: %s ###", id));
         return this;
     }
 
+    @Step("User clicks add button")
     public MainPage clickAddButton() {
         addButton.click();
         logger.info("### User clicked Add button ###");
         return this;
     }
 
+    @Step("User clicks reload page button")
     public MainPage clickReloadPageButton() {
         reloadPageButton.click();
         logger.info("### User clicked Reload Page button ###");
         return this;
     }
 
+    @Step("User clicks remove button")
     public MainPage clickRemoveButton() {
         removeButton.click();
         logger.info("### User clicked Remove button ###");
         return this;
     }
 
+    @Step("Button alert assert")
     public MainPage assertThatButtonAlertContainsMessage(String message) {
         WebElement buttonAlert = getDriver().findElement(By.className("series-alert"));
         assertTrue(buttonAlert.getText().contains(message), format("%s is not expected message", message));
@@ -83,17 +91,19 @@ public class MainPage {
         return this;
     }
 
+    @Step("Added series assert")
     public MainPage assertThatAddedSeriesIsOnList(String title) {
         WebElement firstItem = getDriver().findElements(By.className("list-group-item")).get(0);
         assertTrue(firstItem.getText().contains(title), format("%s is not expected title", title));
-        logger.info(format("### SUCCESS: list contains TV series: %s ###", title));
+        logger.info(format("### SUCCESS: series list contains TV series: %s ###", title));
         return this;
     }
 
-    public MainPage assertThatSeriesListIsEmpty() {
-        List<WebElement> list = getDriver().findElements(By.className("list-group-item"));
-        assertEquals(0, list.size(), "List is not empty");
-        logger.info("### SUCCESS: list is empty ###");
+    @Step("Series list size assert")
+    public MainPage assertThatSeriesListSizeIsEqualTo(int number) {
+        List<WebElement> seriesList = getDriver().findElements(By.className("list-group-item"));
+        assertEquals(number, seriesList.size(), String.format("%d is not expected list size", number));
+        logger.info(format("### SUCCESS: series list size is: %d ###", number));
         return this;
     }
 }

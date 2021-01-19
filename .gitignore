@@ -27,3 +27,10 @@ release.properties
 *.iws
 out/
 .idea_modules/
+
+##########################
+## Other
+##########################
+.mvn
+.allure
+allure-results
