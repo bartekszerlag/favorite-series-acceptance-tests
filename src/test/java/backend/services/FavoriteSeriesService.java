@@ -16,7 +16,6 @@ public class FavoriteSeriesService {
         return when()
                 .get("/series")
                 .then()
-                .statusCode(200)
                 .extract()
                 .jsonPath()
                 .getList(".", SeriesResponse.class);
@@ -29,7 +28,6 @@ public class FavoriteSeriesService {
                 .when()
                 .post("/series")
                 .then()
-                .statusCode(201)
                 .extract()
                 .response();
     }
@@ -40,7 +38,6 @@ public class FavoriteSeriesService {
                 .when()
                 .delete("/series/{id}")
                 .then()
-                .statusCode(200)
                 .extract()
                 .response();
     }

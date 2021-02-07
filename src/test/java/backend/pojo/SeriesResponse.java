@@ -39,7 +39,3 @@ public class SeriesResponse {
         this.platform = platform;
     }
 }
-
-enum Platform {
-    NETFLIX, HBO, OTHER
-}

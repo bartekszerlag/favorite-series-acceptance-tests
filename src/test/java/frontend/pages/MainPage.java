@@ -6,6 +6,7 @@ import org.openqa.selenium.support.FindBy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static frontend.config.DriverManager.getDriver;
@@ -52,7 +53,7 @@ public class MainPage {
         return this;
     }
 
-    public MainPage typeIntoIdInput(String id){
+    public MainPage typeIntoIdInput(String id) {
         idInput.sendKeys(id);
         logger.info(format("### User typed id: %s ###", id));
         return this;
@@ -76,10 +77,12 @@ public class MainPage {
         return this;
     }
 
-    public MainPage assertThatButtonAlertContainsMessage(String message) {
+    public MainPage assertThatButtonAlertContainsMessage(String... messages) {
         WebElement buttonAlert = getDriver().findElement(By.className("series-alert"));
-        assertTrue(buttonAlert.getText().contains(message), format("%s is not expected message", message));
-        logger.info(format("### SUCCESS: button alert contains proper text: %s ###", message));
+        Arrays.stream(messages).forEach(message -> {
+            assertTrue(buttonAlert.getText().contains(message), format("%s is not expected message", message));
+            logger.info(format("### SUCCESS: button alert contains proper text: %s ###", message));
+        });
         return this;
     }
 
@@ -90,10 +93,10 @@ public class MainPage {
         return this;
     }
 
-    public MainPage assertThatSeriesListIsEmpty() {
+    public MainPage assertThatSeriesListSizeIs(int size) {
         List<WebElement> list = getDriver().findElements(By.className("list-group-item"));
-        assertEquals(0, list.size(), "List is not empty");
-        logger.info("### SUCCESS: list is empty ###");
+        assertEquals(size, list.size());
+        logger.info(format("### SUCCESS: list size is %d ###", size));
         return this;
     }
 }

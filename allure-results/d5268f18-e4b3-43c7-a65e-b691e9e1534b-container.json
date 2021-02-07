@@ -1,0 +1,1 @@
+{"uuid":"d5268f18-e4b3-43c7-a65e-b691e9e1534b","name":"shouldRemoveSeries()","children":["06be6965-a278-4726-9667-4e1ba2eac557"],"befores":[{"name":"classSetup","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1610990225346,"stop":1610990225473}],"afters":[],"links":[],"start":1610990225345,"stop":1610990225613}
