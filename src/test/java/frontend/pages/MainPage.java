@@ -7,6 +7,7 @@ import org.openqa.selenium.support.FindBy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static frontend.config.DriverManager.getDriver;
@@ -56,7 +57,7 @@ public class MainPage {
     }
 
     @Step("User types id")
-    public MainPage typeIntoIdInput(String id){
+    public MainPage typeIntoIdInput(String id) {
         idInput.sendKeys(id);
         logger.info(format("### User typed id: %s ###", id));
         return this;
@@ -84,10 +85,12 @@ public class MainPage {
     }
 
     @Step("Button alert assert")
-    public MainPage assertThatButtonAlertContainsMessage(String message) {
+    public MainPage assertThatButtonAlertContainsMessage(String... messages) {
         WebElement buttonAlert = getDriver().findElement(By.className("series-alert"));
-        assertTrue(buttonAlert.getText().contains(message), format("%s is not expected message", message));
-        logger.info(format("### SUCCESS: button alert contains proper text: %s ###", message));
+        Arrays.stream(messages).forEach(message -> {
+            assertTrue(buttonAlert.getText().contains(message), format("%s is not expected message", message));
+            logger.info(format("### SUCCESS: button alert contains proper text: %s ###", message));
+        });
         return this;
     }
 
@@ -100,10 +103,10 @@ public class MainPage {
     }
 
     @Step("Series list size assert")
-    public MainPage assertThatSeriesListSizeIsEqualTo(int number) {
-        List<WebElement> seriesList = getDriver().findElements(By.className("list-group-item"));
-        assertEquals(number, seriesList.size(), String.format("%d is not expected list size", number));
-        logger.info(format("### SUCCESS: series list size is: %d ###", number));
+    public MainPage assertThatSeriesListSizeIs(int size) {
+        List<WebElement> list = getDriver().findElements(By.className("list-group-item"));
+        assertEquals(size, list.size());
+        logger.info(format("### SUCCESS: list size is %d ###", size));
         return this;
     }
 }

@@ -5,6 +5,11 @@ public class SeriesRequest {
     private String title;
     private String platform;
 
+    public SeriesRequest(String title, String platform) {
+        this.title = title;
+        this.platform = platform;
+    }
+
     public String getTitle() {
         return title;
     }
