@@ -39,6 +39,7 @@ public class SeriesUITests extends TestBase {
                 )
                 .clickReloadPageButton()
                 .assertThatAddedSeriesIsOnList(title)
+                .assertThatSeriesListSizeIs(1)
                 .typeIntoTitleInput(title)
                 .typeIntoPlatformInput(platform)
                 .clickAddButton()
