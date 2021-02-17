@@ -11,15 +11,20 @@ To run acceptance tests you need to start the application first. All information
 
 To run frontend tests you need to go to the project directory and run:
 
-### `./mvnw -Dtest="frontend.tests.**" test`
+#### `./mvnw -Dtest="frontend.tests.**" test`
 
 If you want to run backend tests:
 
-### `./mvnw -Dtest="backend.tests.**" test`
+#### `./mvnw -Dtest="backend.tests.**" test`
 
 To generate report of all tests you have to run:
 
-### `./mvnw test allure:report`
+#### `./mvnw test allure:report`
 
 You will find the report in **target/site/allure-maven-plugin/index.html** file.
 
+To open report in a browser wait until report will be ready and run:
+
+#### `./mvnw allure:serve`
+
+Remember to finish the process in terminal (`CTR + C`) after closing the browser
