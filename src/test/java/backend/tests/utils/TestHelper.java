@@ -13,18 +13,23 @@ public class TestHelper {
     private static final FavoriteSeriesService favoriteSeriesService = new FavoriteSeriesService();
 
     public static void deleteAllSeries() {
-        List<Integer> seriesIds;
         List<SeriesResponse> seriesList = favoriteSeriesService.getAllSeries();
         if (seriesList.size() > 0) {
-            seriesIds = seriesList.stream().map(SeriesResponse::getId).collect(Collectors.toList());
-            seriesIds.forEach(favoriteSeriesService::removeSeries);
+            seriesList
+                    .stream()
+                    .map(SeriesResponse::getId)
+                    .collect(Collectors.toList())
+                    .forEach(favoriteSeriesService::removeSeries);
         }
     }
 
     public static void fillSeriesList() {
         List<SeriesResponse> seriesList = favoriteSeriesService.getAllSeries();
         if (seriesList.size() == 0) {
-            IntStream.range(0, 5).mapToObj(i -> getSeriesList().get(i)).forEach(favoriteSeriesService::addSeries);
+            IntStream
+                    .range(0, 5)
+                    .mapToObj(i -> getSeriesList().get(i))
+                    .forEach(favoriteSeriesService::addSeries);
         }
     }
 
