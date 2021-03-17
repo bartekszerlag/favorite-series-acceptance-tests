@@ -7,10 +7,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
 
+import static common.config.PropertiesReader.getProperties;
 import static frontend.config.DriverConfig.initDriverConfig;
 import static frontend.config.DriverConfig.navigateToPage;
 import static frontend.config.DriverManager.closeDriver;
-import static frontend.config.PropertiesReader.getProperties;
 import static java.lang.String.format;
 
 @Slf4j

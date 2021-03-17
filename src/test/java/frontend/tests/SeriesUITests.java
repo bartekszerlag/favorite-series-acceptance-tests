@@ -7,8 +7,8 @@ import io.qameta.allure.Severity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static backend.tests.utils.TestHelper.deleteAllSeries;
-import static backend.tests.utils.TestHelper.fillSeriesList;
+import static common.utils.TestHelper.deleteAllSeries;
+import static common.utils.TestHelper.fillSeriesList;
 import static frontend.config.DriverManager.getDriver;
 import static io.qameta.allure.SeverityLevel.BLOCKER;
 
@@ -24,7 +24,7 @@ public class SeriesUITests extends TestBase {
     @Description("User should try add two series with te same title and see only one series on the list")
     @Test
     void shouldAddOnlyOneSeriesWithTheSameTitleToEmptyList() {
-        //when
+        //given
         String title = "Ozark";
         String platform = "Netflix";
 
@@ -55,11 +55,12 @@ public class SeriesUITests extends TestBase {
     @Description("User should not add series to full list and see failed alert")
     @Test
     void shouldNotAddSeriesToFullList() {
-        //when
-        fillSeriesList();
-
+        //given
         String title = "Ozark";
         String platform = "Netflix";
+
+        //when
+        fillSeriesList();
 
         //then
         new MainPage()
