@@ -2,8 +2,8 @@ package frontend.config;
 
 import org.openqa.selenium.WebDriver;
 
+import static common.config.PropertiesReader.getProperties;
 import static frontend.config.BrowserManager.getBrowserDriver;
-import static frontend.config.PropertiesReader.getProperties;
 
 public class DriverManager {
 

@@ -1,4 +1,4 @@
-package backend.tests.utils;
+package common.utils;
 
 import backend.pojo.SeriesRequest;
 import backend.pojo.SeriesResponse;

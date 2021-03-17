@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static backend.tests.utils.TestHelper.deleteAllSeries;
-import static backend.tests.utils.TestHelper.fillSeriesList;
+import static common.utils.TestHelper.deleteAllSeries;
+import static common.utils.TestHelper.fillSeriesList;
 import static io.qameta.allure.SeverityLevel.BLOCKER;
 import static java.lang.String.format;
 import static org.junit.jupiter.api.Assertions.assertEquals;
