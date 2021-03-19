@@ -8,9 +8,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
 
 import static common.config.PropertiesReader.getProperties;
+import static common.utils.TestHelper.deleteAllSeries;
 import static frontend.config.DriverConfig.initDriverConfig;
 import static frontend.config.DriverConfig.navigateToPage;
 import static frontend.config.DriverManager.closeDriver;
+import static frontend.config.DriverManager.getDriver;
 import static java.lang.String.format;
 
 @Slf4j
@@ -18,16 +20,18 @@ public class TestBase {
 
     static FavoriteSeriesService favoriteSeriesService;
 
-    @BeforeEach
-    void displayTestName(TestInfo testInfo) {
-        log.info(format("### TEST: %s ###", testInfo.getDisplayName()));
-    }
-
     @BeforeAll
     static void suitSetup() {
         favoriteSeriesService = new FavoriteSeriesService();
         initDriverConfig();
         navigateToPage(getProperties().baseUrl());
+    }
+
+    @BeforeEach
+    void classSetup(TestInfo testInfo) {
+        log.info(format("### TEST: %s ###", testInfo.getDisplayName()));
+        deleteAllSeries();
+        getDriver().navigate().refresh();
     }
 
     @AfterAll
