@@ -4,21 +4,12 @@ import backend.pojo.SeriesRequest;
 import frontend.pages.MainPage;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static common.utils.TestHelper.deleteAllSeries;
 import static common.utils.TestHelper.fillSeriesList;
-import static frontend.config.DriverManager.getDriver;
 import static io.qameta.allure.SeverityLevel.BLOCKER;
 
 public class SeriesUITests extends TestBase {
-
-    @BeforeEach
-    void classSetup() {
-        deleteAllSeries();
-        getDriver().navigate().refresh();
-    }
 
     @Severity(BLOCKER)
     @Description("User should try add two series with te same title and see only one series on the list")
@@ -77,9 +68,11 @@ public class SeriesUITests extends TestBase {
     @Description("User should remove series from list with one element, see success alert and empty list")
     @Test
     void shouldRemoveSeriesFromListWithOneElement() {
-        //when
-        favoriteSeriesService.addSeries(new SeriesRequest("Friends", "Netflix"));
-        String seriesId = String.valueOf(favoriteSeriesService.getAllSeries().get(0).getId());
+        //given
+        String seriesId = favoriteSeriesService
+                .addSeries(new SeriesRequest("Friends", "Netflix"))
+                .path("id")
+                .toString();
 
         //then
         new MainPage()
