@@ -176,6 +176,7 @@ public class SeriesAPITests extends TestBase {
         //given
         String login = getProperties().authLogin();
         String password = getProperties().authPassword();
+        
         //when
         Response response = favoriteSeriesApi.getSecretMessage(login, password);
 
