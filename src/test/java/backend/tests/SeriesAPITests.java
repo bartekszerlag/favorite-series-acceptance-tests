@@ -80,7 +80,7 @@ public class SeriesAPITests extends TestBase {
         seriesList = favoriteSeriesService.getAllSeries();
 
         //then
-        assertEquals(200, response.statusCode());
+        assertEquals(204, response.statusCode());
         assertEquals(0, seriesList.size());
     }
 
