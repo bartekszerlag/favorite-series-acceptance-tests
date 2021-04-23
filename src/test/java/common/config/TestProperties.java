@@ -18,4 +18,10 @@ public interface TestProperties extends Config {
 
     @Key("driver")
     BrowserType driver();
+
+    @Key("auth_login")
+    String authLogin();
+
+    @Key("auth_password")
+    String authPassword();
 }

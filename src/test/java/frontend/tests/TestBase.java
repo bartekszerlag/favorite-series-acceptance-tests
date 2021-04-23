@@ -1,6 +1,8 @@
 package frontend.tests;
 
-import backend.services.FavoriteSeriesService;
+import backend.api.FavoriteSeriesApi;
+import backend.utils.ResponseProcessor;
+import common.utils.TestHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -8,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
 
 import static common.config.PropertiesReader.getProperties;
-import static common.utils.TestHelper.deleteAllSeries;
 import static frontend.config.DriverConfig.initDriverConfig;
 import static frontend.config.DriverConfig.navigateToPage;
 import static frontend.config.DriverManager.closeDriver;
@@ -18,11 +19,15 @@ import static java.lang.String.format;
 @Slf4j
 public class TestBase {
 
-    static FavoriteSeriesService favoriteSeriesService;
+    static FavoriteSeriesApi favoriteSeriesService;
+    static ResponseProcessor responseProcessor;
+    static TestHelper testHelper;
 
     @BeforeAll
     static void suitSetup() {
-        favoriteSeriesService = new FavoriteSeriesService();
+        favoriteSeriesService = new FavoriteSeriesApi();
+        responseProcessor = new ResponseProcessor();
+        testHelper = new TestHelper(responseProcessor, favoriteSeriesService);
         initDriverConfig();
         navigateToPage(getProperties().baseUrl());
     }
@@ -30,7 +35,7 @@ public class TestBase {
     @BeforeEach
     void classSetup(TestInfo testInfo) {
         log.info(format("### TEST: %s ###", testInfo.getDisplayName()));
-        deleteAllSeries();
+        testHelper.deleteAllSeries();
         getDriver().navigate().refresh();
     }
 

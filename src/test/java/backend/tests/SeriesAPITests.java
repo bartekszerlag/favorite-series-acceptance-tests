@@ -10,93 +10,188 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static common.utils.TestHelper.deleteAllSeries;
-import static common.utils.TestHelper.fillSeriesList;
+import static common.config.PropertiesReader.getProperties;
 import static io.qameta.allure.SeverityLevel.BLOCKER;
+import static io.qameta.allure.SeverityLevel.CRITICAL;
 import static java.lang.String.format;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SeriesAPITests extends TestBase {
 
     private List<SeriesResponse> seriesList;
+    private SeriesRequest series = new SeriesRequest("Ozark", "Netflix");
 
     @BeforeEach
     void classSetup() {
-        deleteAllSeries();
+        testHelper.deleteAllSeries();
     }
 
     @Severity(BLOCKER)
-    @Description("New TV series should be added to empty list and GET method should return it")
+    @Description("New TV series should be added to empty list")
+    @Test
+    void shouldAddSeriesToEmptyList() {
+        //given
+        Response response;
+
+        //when
+        response = favoriteSeriesApi.addSeries(series);
+
+        //then
+        assertThat(response.statusCode()).isEqualTo(201);
+
+        //when
+        response = favoriteSeriesApi.getAllSeries();
+        seriesList = responseProcessor.getSeriesList(response);
+
+        //then
+        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(seriesList.size()).isEqualTo(1);
+    }
+
+    @Severity(CRITICAL)
+    @Description("Only one TV series with specific title should be added to empty list")
     @Test
     void shouldAddOnlyOneSeriesWithTheSameTitleToEmptyList() {
         //given
         Response response;
-        SeriesRequest series = new SeriesRequest("Ozark", "Netflix");
 
         //when
-        response = favoriteSeriesService.addSeries(series);
-        seriesList = favoriteSeriesService.getAllSeries();
+        response = favoriteSeriesApi.addSeries(series);
 
         //then
-        assertEquals(201, response.statusCode());
-        assertEquals(1, seriesList.size());
+        assertThat(response.statusCode()).isEqualTo(201);
 
         //when
-        response = favoriteSeriesService.addSeries(series);
-        seriesList = favoriteSeriesService.getAllSeries();
+        response = favoriteSeriesApi.getAllSeries();
+        seriesList = responseProcessor.getSeriesList(response);
 
         //then
-        assertEquals(409, response.statusCode());
-        assertEquals(1, seriesList.size());
+        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(seriesList.size()).isEqualTo(1);
+
+        //when
+        response = favoriteSeriesApi.addSeries(series);
+
+        //then
+        assertThat(response.statusCode()).isEqualTo(409);
+
+        //when
+        response = favoriteSeriesApi.getAllSeries();
+        seriesList = responseProcessor.getSeriesList(response);
+
+        //then
+        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(seriesList.size()).isEqualTo(1);
     }
 
-    @Severity(BLOCKER)
+    @Severity(CRITICAL)
     @Description("New TV series should not be added to full list")
     @Test
     void shouldNotAddSeriesToFullList() {
         //given
-        fillSeriesList();
-        SeriesRequest series = new SeriesRequest("Ozark", "Netflix");
+        Response response;
+        testHelper.fillSeriesList();
 
         //when
-        Response response = favoriteSeriesService.addSeries(series);
-        String errorMessage = response.path("message");
+        response = favoriteSeriesApi.getAllSeries();
+        seriesList = responseProcessor.getSeriesList(response);
 
         //then
-        assertEquals(403, response.statusCode());
-        assertEquals("Series limit is: 5", errorMessage);
+        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(seriesList.size()).isEqualTo(5);
+
+        //when
+        response = favoriteSeriesApi.addSeries(series);
+
+        //then
+        assertThat(response.statusCode()).isEqualTo(403);
+        assertThat(response.path("message").toString()).isEqualTo("Series limit is: 5");
     }
 
     @Severity(BLOCKER)
-    @Description("New TV series should be removed and GET method should return empty list")
+    @Description("New TV series should be removed")
     @Test
     void shouldRemoveSeriesFromListWithOneElement() {
         //given
-        favoriteSeriesService.addSeries(new SeriesRequest("Ozark", "Netflix"));
-        int seriesId = favoriteSeriesService.getAllSeries().get(0).getId();
+        Response response;
 
         //when
-        Response response = favoriteSeriesService.removeSeries(seriesId);
-        seriesList = favoriteSeriesService.getAllSeries();
+        response = favoriteSeriesApi.addSeries(series);
+        int seriesId = response.path("id");
 
         //then
-        assertEquals(204, response.statusCode());
-        assertEquals(0, seriesList.size());
+        assertThat(response.statusCode()).isEqualTo(201);
+
+        //when
+        response = favoriteSeriesApi.getAllSeries();
+        seriesList = responseProcessor.getSeriesList(response);
+
+        //then
+        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(seriesList.size()).isEqualTo(1);
+
+        //when
+        response = favoriteSeriesApi.removeSeries(seriesId);
+
+        //then
+        assertThat(response.statusCode()).isEqualTo(204);
+
+        //when
+        response = favoriteSeriesApi.getAllSeries();
+        seriesList = responseProcessor.getSeriesList(response);
+
+        //then
+        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(seriesList.size()).isEqualTo(0);
     }
 
-    @Severity(BLOCKER)
+    @Severity(CRITICAL)
     @Description("TV series should not be removed from empty list")
     @Test
     void shouldNotRemoveSeriesFromEmptyList() {
         //given
+        Response response;
         int seriesId = 1;
 
         //when
-        Response response = favoriteSeriesService.removeSeries(seriesId);
-        String errorMessage = response.path("message");
+        response = favoriteSeriesApi.getAllSeries();
+        seriesList = responseProcessor.getSeriesList(response);
 
         //then
-        assertEquals(404, response.statusCode());
-        assertEquals(format("Series with id: %d not exist", seriesId), errorMessage);
+        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(seriesList.size()).isEqualTo(0);
+
+        //when
+        response = favoriteSeriesApi.removeSeries(seriesId);
+
+        //then
+        assertThat(response.statusCode()).isEqualTo(404);
+        assertThat(response.path("message").toString()).isEqualTo(format("Series with id: %d not exist", seriesId));
+    }
+
+    @Severity(CRITICAL)
+    @Description("Secret message should be returned for valid credentials")
+    @Test
+    void shouldGetSecretMessageWithValidCredentials() {
+        //given
+        String login = getProperties().authLogin();
+        String password = getProperties().authPassword();
+        //when
+        Response response = favoriteSeriesApi.getSecretMessage(login, password);
+
+        //then
+        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(response.body().asString()).contains("If you are bored of watching TV series try:");
+    }
+
+    @Severity(CRITICAL)
+    @Description("Secret message should not be returned for invalid credentials")
+    @Test
+    void shouldNotGetSecretMessageWithInvalidCredentials() {
+        //when
+        Response response = favoriteSeriesApi.getSecretMessage("fake", "fake");
+
+        //then
+        assertThat(response.statusCode()).isEqualTo(401);
     }
 }
