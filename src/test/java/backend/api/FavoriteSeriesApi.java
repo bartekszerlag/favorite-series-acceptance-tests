@@ -1,26 +1,22 @@
-package backend.services;
+package backend.api;
 
 import backend.pojo.SeriesRequest;
-import backend.pojo.SeriesResponse;
 import io.qameta.allure.Step;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
-import java.util.List;
-
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 
-public class FavoriteSeriesService {
+public class FavoriteSeriesApi {
 
     @Step("Get all TV series")
-    public List<SeriesResponse> getAllSeries() {
+    public Response getAllSeries() {
         return when()
                 .get("/series")
                 .then()
                 .extract()
-                .jsonPath()
-                .getList(".", SeriesResponse.class);
+                .response();
     }
 
     @Step("Add new TV series")
@@ -41,6 +37,16 @@ public class FavoriteSeriesService {
                 .pathParam("id", id)
                 .when()
                 .delete("/series/{id}")
+                .then()
+                .extract()
+                .response();
+    }
+
+    @Step("Get secret message")
+    public Response getSecretMessage(String login, String password) {
+        return given()
+                .auth().basic(login, password)
+                .get("/secret")
                 .then()
                 .extract()
                 .response();

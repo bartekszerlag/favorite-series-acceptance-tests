@@ -1,8 +1,9 @@
 package common.utils;
 
+import backend.api.FavoriteSeriesApi;
 import backend.pojo.SeriesRequest;
 import backend.pojo.SeriesResponse;
-import backend.services.FavoriteSeriesService;
+import backend.utils.ResponseProcessor;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,10 +11,16 @@ import java.util.stream.IntStream;
 
 public class TestHelper {
 
-    private static final FavoriteSeriesService favoriteSeriesService = new FavoriteSeriesService();
+    private ResponseProcessor responseProcessor;
+    private FavoriteSeriesApi favoriteSeriesService;
 
-    public static void deleteAllSeries() {
-        List<SeriesResponse> seriesList = favoriteSeriesService.getAllSeries();
+    public TestHelper(ResponseProcessor responseProcessor, FavoriteSeriesApi favoriteSeriesService) {
+        this.responseProcessor = responseProcessor;
+        this.favoriteSeriesService = favoriteSeriesService;
+    }
+
+    public void deleteAllSeries() {
+        List<SeriesResponse> seriesList = getSeriesList();
         if (seriesList.size() > 0) {
             seriesList
                     .stream()
@@ -23,17 +30,17 @@ public class TestHelper {
         }
     }
 
-    public static void fillSeriesList() {
-        List<SeriesResponse> seriesList = favoriteSeriesService.getAllSeries();
+    public void fillSeriesList() {
+        List<SeriesResponse> seriesList = getSeriesList();
         if (seriesList.size() == 0) {
             IntStream
                     .range(0, 5)
-                    .mapToObj(i -> getSeriesList().get(i))
+                    .mapToObj(i -> generateSeries().get(i))
                     .forEach(favoriteSeriesService::addSeries);
         }
     }
 
-    private static List<SeriesRequest> getSeriesList() {
+    private static List<SeriesRequest> generateSeries() {
         return List.of(
                 new SeriesRequest("Friends", "Netflix"),
                 new SeriesRequest("Narcos", "Netflix"),
@@ -41,5 +48,9 @@ public class TestHelper {
                 new SeriesRequest("Klan", "TVP"),
                 new SeriesRequest("Ranczo", "TVP")
         );
+    }
+
+    private List<SeriesResponse> getSeriesList() {
+        return responseProcessor.getSeriesList(favoriteSeriesService.getAllSeries());
     }
 }
